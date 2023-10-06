@@ -5,7 +5,8 @@ const game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
   preload: preload,
   create: create,
   update: update
-})
+});
+
 
 // Declare shared variables at the top so all methods can access them
 let score = 0
@@ -21,6 +22,9 @@ function preload () {
   game.load.image('ground', './assets/platform.png')
   game.load.image('diamond', './assets/diamond.png')
   game.load.spritesheet('woof', './assets/woof.png', 32, 32)
+  game.load.spritesheet('viking', './assets/viking.webp', 78, 58)
+  game.load.spritesheet('ash', './assets/ash.png', 64, 64)
+  game.load.spritesheet("farmer", './assets/farmer-walk.png', 96, 128);
 }
 
 function create () {
@@ -52,8 +56,11 @@ function create () {
   ledge = platforms.create(-75, 350, 'ground')
   ledge.body.immovable = true
 
+  // JK - The OG player sprite, comment in line 62 and comment out 64 to see OG woof
   // The player and its settings
-  player = game.add.sprite(32, game.world.height - 150, 'woof')
+  // player = game.add.sprite(32, game.world.height - 150, 'woof')
+
+  player = game.add.sprite(20, game.world.height - 150, 'farmer');
 
   //  We need to enable physics on the player
   game.physics.arcade.enable(player)
@@ -64,8 +71,13 @@ function create () {
   player.body.collideWorldBounds = true
 
   //  Our two animations, walking left and right.
-  player.animations.add('left', [0, 1], 10, true)
-  player.animations.add('right', [2, 3], 10, true)
+  // player.animations.add('left', [0, 1], 10, true)
+  // player.animations.add('right', [2, 3], 10, true)
+
+  player.animations.add('left', [3, 5], 5, true)
+  player.animations.add('right', [9, 11], 5, true)
+  player.animations.add('up', [6, 8], 5, true)
+  player.animations.add('down', [0, 2], 5, true)
 
   //  Finally some diamonds to collect
   diamonds = game.add.group()
@@ -87,6 +99,7 @@ function create () {
 
   //  And bootstrap our controls
   cursors = game.input.keyboard.createCursorKeys()
+
 }
 
 function update () {
@@ -131,3 +144,4 @@ function collectDiamond (player, diamond) {
   score += 10
   scoreText.text = 'Score: ' + score
 }
+
